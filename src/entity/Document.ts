@@ -6,6 +6,7 @@ import { ExtensionAutoriser } from "./ExtensionAutoriser";
 import { Suggestion } from "./Suggestion";
 import { Correction } from "./Correction";
 import { Commentaire } from "./Commentaire";
+import { Classe } from "./Classe";
 
 @Entity()
 export class Document {
@@ -54,4 +55,7 @@ export class Document {
         nullable:true
     })
     commentaires: Commentaire[]
+
+    @ManyToOne(type => Classe, classe => classe.documents, {nullable: true})
+    classe : Classe
 }

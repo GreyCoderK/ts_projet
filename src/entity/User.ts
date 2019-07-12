@@ -37,7 +37,7 @@ export class User {
     contact: string
 
     @Column("varchar")
-    photo: string
+    password: string
 
     @ManyToOne(type => TypeUser, typeUser => typeUser.users,{nullable: true})
     typeUser : TypeUser

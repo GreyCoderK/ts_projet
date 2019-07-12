@@ -5,6 +5,7 @@ import validationMiddleware from '../middleware/validation.middleware';
 import {Classe} from '../entity/Classe'
 import {ClasseDto} from "../dto/classe.dto"
 import NotFoundException from '../exception/notFoundException';
+import { Serie } from 'entity/Serie';
 
 class ClasseController implements controller {
 
@@ -19,7 +20,7 @@ class ClasseController implements controller {
     
     public intializeRoutes() {
         this.router.get(this.path, this.getAllClasse);
-        this.router.get(`${this.path}/:id`, this.getClasseById);
+        this.router.get(`${this.path}/:id`, this.getClasse);
         this.router.put(`${this.path}/:id`, validationMiddleware(ClasseDto, true),this.modifyClasse);
         this.router.delete(`${this.path}/:id`, this.deleteClasse);
         this.router.post(this.path, validationMiddleware(ClasseDto),this.createAClasse);
@@ -30,9 +31,9 @@ class ClasseController implements controller {
         response.send(classes)
     }
 
-    private getClasseById = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+    private getClasse = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
-        const classe = await this.classeRepository.findOne(id);
+        const classe = await this.findClasse(id);
         if (classe) {
           response.send(classe);
         } else {
@@ -40,20 +41,44 @@ class ClasseController implements controller {
         }
     }
     
-    private createAClasse = async(request: express.Request, response: express.Response) => {
-        const classe: Classe = request.body
-        const newClasse = this.classeRepository.create(classe);
-        await this.classeRepository.save(newClasse);
-        response.send(newClasse);
+    private createAClasse = async(request: express.Request, response: express.Response,next: express.NextFunction) => {
+      const id = request.params.id;
+      const classe = new Classe()
+      classe.libelle = request.body.libelle
+      if(request.body.series){
+        request.body.series.forEach(async serie => {
+          var new_serie = await getRepository(Serie).findOne(serie)
+          if(!new_serie){
+            next(new NotFoundException(`La serie avec ${serie} `))
+          }
+          classe.series.push(new_serie)
+        });
+      }
+      const newClasse = this.classeRepository.create(classe);
+      await this.classeRepository.save(newClasse);
+      response.send(newClasse);
     }
 
     private modifyClasse = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
-        const classe: Classe = request.body;
+        const classe = new Classe()
+        classe.libelle = request.body.libelle
+        var series = []
+        if(request.body.series){
+          request.body.series.forEach(async serie => {
+            var new_serie = await getRepository(Serie).findOne(serie)
+            if(!new_serie){
+              next(new NotFoundException(`La serie avec ${serie} `))
+            }
+            series.push(new_serie)
+          });
+        }
+
+        classe.series = series
         await this.classeRepository.update(id, classe);
-        const updatedPost = await this.classeRepository.findOne(id);
-        if (updatedPost) {
-          response.send(updatedPost);
+        const updatedClasse = await this.classeRepository.findOne(id);
+        if (updatedClasse) {
+          response.send(updatedClasse);
         } else {
           next(new NotFoundException(id));
         }
@@ -67,6 +92,10 @@ class ClasseController implements controller {
         } else {
             next(new NotFoundException(id));
         }
+    }
+
+    private findClasse = async (item) => {
+      return await this.classeRepository.findOne(item) || this.classeRepository.findOne({"libelle" :item})
     }
 }
 

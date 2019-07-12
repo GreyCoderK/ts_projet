@@ -14,6 +14,6 @@ export class logiciel {
     @Column("text", {nullable: true})
     description: string
 
-    @Column("int")
+    @Column("int",{default:0})
     telechargement: number
 }

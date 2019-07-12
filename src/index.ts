@@ -1,9 +1,9 @@
-import "reflect-metadata";
-import {createConnection} from "typeorm";
+import "reflect-metadata"
+import {createConnection} from "typeorm"
 import App from "./App"
-import ClasseController from "./controller/classe.controller";
-import TypeUserController from "./controller/type_user.controller";
-import TypeDocumentController from "./controller/type_document.controller";
+import ClasseController from "./controller/classe.controller"
+import TypeUserController from "./controller/type_user.controller"
+import TypeDocumentController from "./controller/type_document.controller"
 
 (async () => {
     try {
@@ -13,11 +13,12 @@ import TypeDocumentController from "./controller/type_document.controller";
       return error;
     }
     const app = new App(
-        [
-            new ClasseController(),
-            new TypeUserController(),
-            new TypeDocumentController()
-        ],
-    7777);
-    app.listen();
+      [
+        new ClasseController(),
+        new TypeUserController(),
+        new TypeDocumentController()
+      ],
+      7777
+    );
+    await app.listen();
 })();

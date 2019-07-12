@@ -19,7 +19,7 @@ class TypeDocumentController implements controller {
     
     public intializeRoutes() {
         this.router.get(this.path, this.getAllTypeDocument);
-        this.router.get(`${this.path}/:id`, this.getTypeDocumentById);
+        this.router.get(`${this.path}/:id`, this.getTypeDocument);
         this.router.put(`${this.path}/:id`, validationMiddleware(TypeDocumentDto, true),this.modifyTypeDocument);
         this.router.delete(`${this.path}/:id`, this.deleteTypeDocument);
         this.router.post(this.path, validationMiddleware(TypeDocumentDto),this.createATypeDocument);
@@ -30,9 +30,9 @@ class TypeDocumentController implements controller {
         response.send(typeDocuments)
     }
 
-    private getTypeDocumentById = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+    private getTypeDocument = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
-        const typeDocument = await this.TypeDocumentRepository.findOne(id);
+        const typeDocument = await this.findTypeDocument(id);
         if (typeDocument) {
           response.send(typeDocument);
         } else {
@@ -67,6 +67,10 @@ class TypeDocumentController implements controller {
         } else {
             next(new NotFoundException(id));
         }
+    }
+
+    private findTypeDocument = async (item) => {
+      return await this.TypeDocumentRepository.findOne(item) || this.TypeDocumentRepository.findOne({libelle:item})
     }
 }
 

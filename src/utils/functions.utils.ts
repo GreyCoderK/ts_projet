@@ -1,45 +1,56 @@
-import * as express from "express"
 import * as multer from "multer"
 import * as path from "path"
+import * as crypto from "crypto"
 import HttpException from "../exception/HttpException";
 import { getRepository } from "typeorm";
 import { ExtensionAutoriser } from "../entity/ExtensionAutoriser";
 
-export var storage = (table: string) => {
-        multer.diskStorage({ //multers disk storage settings
-        destination: function (req: express.Resquest, file: express.Response, cb: express.NextFunction) {
-            cb(null, './public/uploads/'+table)
-        },
-        filename: function (req: express.Resquest, file: express.Response, cb: express.NextFunction) {
-            var datetimestamp = Date.now();
-            cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
-        }
-    });
-}
+var algorithm = 'aes-256-ctr'
+var password = 'd6F3Efeq'
+
+var storage = multer.diskStorage({ //multers disk storage settings
+    destination: function (req, file, cb) {
+        cb(null, './public/uploads/')
+    },
+    filename: function (req, file, cb) {
+        var datetimestamp = Date.now();
+        cb(null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+    }
+});
 
 export var getExtentions = () : Array<ExtensionAutoriser> => {
     let extensions: Array<ExtensionAutoriser> = []
-    async (req: express.Resquest, res: express.Response, callback: express.NextFunction) => {
+    async (req, res, callback) => {
         let extensionRepository = getRepository(ExtensionAutoriser)
         extensions = await extensionRepository.find()            
     }
     return extensions
 }
 
-export var upload = (table: string) => {
-        multer({ //multer settings
-        storage: storage(table),
-        fileFilter: function (req: express.Resquest, file: express.Response, callback: express.NextFunction) {
-            let ext = path.extname(file.originalname);
-            let extensions = getExtentions()
-            if(extensions.find(el => el.libelle == ext )){
-                callback(null, true)
-            }else{
-                callback(new HttpException(400,"L'exntension que vous utilise n'est pas reconnue"))                
-            }
-        },
-        limits:{
-            fileSize: 1024 * 1024
+export var upload = multer({ //multer settings
+    storage: storage,
+    fileFilter: function (req, file, callback) {
+        let ext = path.extname(file.originalname);
+        let extensions = getExtentions()
+        if(extensions.find(el => el.libelle == ext )){
+            callback(null, true)
+        }else{
+            callback(new HttpException(400,"L'exntension que vous utilise n'est pas reconnue"))                
         }
-    }).single('profilepic');
+    },
+    limits:{
+        fileSize: 1024 * 1024
+    }
+}).single('profilepic');
+
+export var encrypt = (buffer) => {
+    var cipher = crypto.createCipher(algorithm,password)
+    var crypted = Buffer.concat([cipher.update(buffer),cipher.final()])
+    return crypted
+}
+
+export var decrypt = (buffer) => {
+    var decipher = crypto.createDecipher(algorithm,password)
+    var crypted = Buffer.concat([decipher.update(buffer),decipher.final()])
+    return crypted
 }
