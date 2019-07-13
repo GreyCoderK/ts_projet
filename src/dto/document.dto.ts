@@ -1,4 +1,4 @@
-import { IsString, IsOptional } from "class-validator";
+import { IsString, IsOptional, IsNumber } from "class-validator";
 import { User } from "entity/User";
 import { TypeDocument } from "entity/TypeDocument";
 import { Note } from "entity/Note";
@@ -20,6 +20,12 @@ export class DocumentDto {
 
     @IsString()
     createat: Date
+
+    @IsNumber()
+    telechargement: number
+
+    @IsNumber()
+    nombreVue: number
 
     @IsOptional()
     user: User

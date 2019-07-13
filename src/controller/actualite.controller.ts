@@ -8,6 +8,9 @@ import authMiddleware from 'middleware/auth.middleware';
 import { ActualiteDto } from 'dto/actualite.dto';
 import NotFoundException from 'exception/notFoundException';
 import { Image } from 'entity/Image';
+import { Notification } from 'entity/Notification';
+import { User } from 'entity/User';
+import { Abonnement } from 'entity/Abonnement';
 
 class ActualiteController implements Controller{
     public path = '/actualite';
@@ -25,6 +28,7 @@ class ActualiteController implements Controller{
         this.router.put(`${this.path}/:id`, authMiddleware,validationMiddleware(ActualiteDto, true), upload.array('photos',12),this.modifyActualite);
         this.router.delete(`${this.path}/:id`, authMiddleware, this.deleteActualite);
         this.router.post(this.path, authMiddleware,validationMiddleware(ActualiteDto), upload.array('photos',12),this.createAActualite);
+        this.router.post(`${this.path}/abonnement/actualite`, authMiddleware, this.abonnementActualite);
     }
 
     private getAllActualite = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
@@ -68,7 +72,14 @@ class ActualiteController implements Controller{
         await this.actualiteRepository.update(id, actualite);
         const updatedActualite = await this.actualiteRepository.findOne(id);
         if (updatedActualite) {
-          response.send(updatedActualite);
+            updatedActualite.abonnements.forEach(async actualite => {
+                var notification = new Notification()
+                notification.user = actualite.user
+                notification.type = "Actualite"
+                notification.message = `L'actualite avec le libelle: ${updatedActualite.libelle} a ete modifie`
+                await getRepository(Notification).save(notification)
+            })
+            response.send(updatedActualite);
         } else {
           next(new NotFoundException(id));
         }
@@ -76,6 +87,14 @@ class ActualiteController implements Controller{
 
     private deleteActualite = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
+        const toErase = await this.actualiteRepository.findOne(id);        
+        toErase.abonnements.forEach(async actualite => {
+            var notification = new Notification()
+            notification.user = actualite.user
+            notification.type = "Actualite"
+            notification.message = `L'actualite avec le libelle: ${toErase.libelle} a ete supprime`
+            await getRepository(Notification).save(notification)
+        })
         const deleteResponse = await this.actualiteRepository.delete(id);
         if (deleteResponse.raw[1]) {
             response.sendStatus(200);
@@ -105,6 +124,20 @@ class ActualiteController implements Controller{
         const newActualite = this.actualiteRepository.create(actualite);
         await this.actualiteRepository.save(newActualite);
         response.send(newActualite);
+    }
+
+    private abonnementActualite = async (request, response, next) => {
+        var user = await getRepository(User).findOne(request.user._id)
+        var actualite = await this.actualiteRepository.findOne(request.body.actualite_id)
+        var abonnement = new Abonnement()
+        
+        abonnement.actualite = actualite
+        abonnement.user = user
+
+        var newAbonnement = await getRepository(Abonnement).save(abonnement)
+        user.abonnements.push(newAbonnement)
+        getRepository(User).save(user)
+        response.send(newAbonnement)
     }
 }
 

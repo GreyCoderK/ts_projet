@@ -70,9 +70,9 @@ class NoteController implements Controller{
     private createANote = async (request, response, next) => {
         const note = new Note()
         note.note = request.body.note
-        var user = await getRepository(User).findOne(request.body.user_id)
+        var user = await getRepository(User).findOne(request.user._id)
         if(!user){
-            next(new NotFoundException(`L'utilisateur aver ${request.body.user_id} `))
+            next(new NotFoundException(`L'utilisateur aver ${request.user._id} `))
         }else{
             note.user = user
         }
@@ -85,6 +85,8 @@ class NoteController implements Controller{
         }
         const newNote = this.noteRepository.create(note);
         await this.noteRepository.save(newNote);
+        document.notes.push(newNote)
+        await getRepository(Document).save(document);
         response.send(newNote);
     }
 

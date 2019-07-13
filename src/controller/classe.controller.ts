@@ -42,7 +42,6 @@ class ClasseController implements controller {
     }
     
     private createAClasse = async(request: express.Request, response: express.Response,next: express.NextFunction) => {
-      const id = request.params.id;
       const classe = new Classe()
       classe.libelle = request.body.libelle
       if(request.body.series){

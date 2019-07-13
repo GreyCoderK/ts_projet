@@ -12,5 +12,5 @@ export class logicielDto {
     description: string
 
     @IsOptional()
-    telechargement: number
+    telechargement: Number
 }

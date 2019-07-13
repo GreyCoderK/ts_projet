@@ -12,11 +12,15 @@ export class Classe {
     })
     libelle: string
 
-    @OneToMany(type => Serie, serie => serie.classe, {nullable:true})
+    @OneToMany(type => Serie, serie => serie.classe, {
+        nullable:true,
+        cascade: true
+    })
     series: Serie[]
 
     @OneToMany(type => Document, document => document.classe,{
-        nullable:true
+        nullable:true,
+        cascade: true
     })
     documents: Document[]
 }

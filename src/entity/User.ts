@@ -4,6 +4,8 @@ import { Document } from "./Document";
 import { Note } from "./Note";
 import { Image } from "./Image";
 import { Commentaire } from "./Commentaire";
+import { Abonnement } from "./Abonnement";
+import { Notification } from "./Notification";
 
 @Entity()
 export class User {
@@ -42,21 +44,39 @@ export class User {
     @ManyToOne(type => TypeUser, typeUser => typeUser.users,{nullable: true})
     typeUser : TypeUser
 
-    @OneToMany(type => Document, document => document.user,{nullable: true})
+    @OneToMany(type => Document, document => document.user,{
+        nullable: true,
+        cascade: true
+    })
     documents : Document[]
 
     @OneToMany(type => Note, note => note.document,{
-        nullable:true
+        nullable:true,
+        cascade: true
     })
     notes: Note[]
 
     @OneToMany(type => Image, image => image.user,{
-        nullable:true
+        nullable:true,
+        cascade: true
     })
     images: Image[]
 
     @OneToMany(type => Commentaire, commentaire => commentaire.user,{
-        nullable:true
+        nullable:true,
+        cascade: true
     })
     commentaires: Commentaire[]
+
+    @OneToMany(type => Abonnement, abonnement => abonnement.user,{
+        nullable:true,
+        cascade: true
+    })
+    abonnements: Abonnement[]
+
+    @OneToMany(type => Notification, notification => notification.user,{
+        nullable:true,
+        cascade: true
+    })
+    notifications: Notification[]
 }

@@ -21,7 +21,10 @@ export class Commentaire {
     @ManyToOne(type => Actualite, actualite => actualite.commentaires, {nullable:true})
     actualite:Actualite
 
-    @OneToMany(type => Commentaire, commentaire => commentaire.id, {nullable:true})
+    @OneToMany(type => Commentaire, commentaire => commentaire.id, {
+        nullable:true,
+        cascade: true
+    })
     commentaire: Commentaire[]
 
 }

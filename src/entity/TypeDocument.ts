@@ -12,6 +12,9 @@ export class TypeDocument {
     })
     libelle: string
 
-    @OneToMany(type => Document, document => document.typeDocument,{nullable: true})
+    @OneToMany(type => Document, document => document.typeDocument,{
+        nullable: true,
+        cascade: true
+    })
     documents: Document[]
 }

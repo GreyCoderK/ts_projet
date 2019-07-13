@@ -32,6 +32,8 @@ class App {
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({ extended: false }))
         this.app.use(cookieParser())
+        this.app.use('/static', express.static(__dirname + '/public'));
+        this.app.use('/uploads', express.static(__dirname + '/public/uploads'));
     }
 
     private initializedControllers(controllers: Controller[]){

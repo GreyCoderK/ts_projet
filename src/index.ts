@@ -10,6 +10,8 @@ import NoteController from "controller/note.controller";
 import SerieController from "controller/serie.controller";
 import UserController from "controller/user.controller";
 import ExtensionController from "controller/extension_autoriser.controller";
+import DocumentController from "controller/document.controller";
+import SuggestionController from "controller/suggestion.controller";
 
 (async () => {
     try {
@@ -28,7 +30,9 @@ import ExtensionController from "controller/extension_autoriser.controller";
         new NoteController(),
         new SerieController(),
         new UserController(),
-        new ExtensionController()
+        new ExtensionController(),
+        new DocumentController(),
+        new SuggestionController()
       ],
       7777
     );

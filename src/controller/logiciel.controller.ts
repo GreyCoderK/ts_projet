@@ -26,7 +26,7 @@ class LogicielController implements Controller{
         this.router.put(`${this.path}/:id`, authMiddleware, validationMiddleware(logicielDto, true), upload.single('logiciel'),this.modifyLogiciel);
         this.router.delete(`${this.path}/:id`, authMiddleware,this.deleteLogiciel);
         this.router.post(this.path, authMiddleware,validationMiddleware(logicielDto), upload.single('logiciel'),this.createALogiciel);
-        this.router.get(`${this.path}/download`, this.dowloadLogiciel);
+        this.router.post(`${this.path}/download/logiciel`, this.dowloadLogiciel);
     }
 
     private getAllLogiciel = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
@@ -81,11 +81,11 @@ class LogicielController implements Controller{
             logiciel.libelle = request.file.filename
             logiciel.path = '/public/uploads/'+request.file.filename
             logiciel.description = request.body.description
-        }
 
-        const newLogiciel = this.logicielRepository.create(logiciel);
-        await this.logicielRepository.save(newLogiciel);
-        response.send(newLogiciel);
+            const newLogiciel = this.logicielRepository.create(logiciel);
+            await this.logicielRepository.save(newLogiciel);
+            response.send(newLogiciel)
+        }
     }
 
     public dowloadLogiciel = async (request, response, next) => {

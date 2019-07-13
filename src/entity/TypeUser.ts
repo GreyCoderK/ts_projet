@@ -12,6 +12,9 @@ export class TypeUser {
     })
     libelle: string
 
-    @OneToMany(type => User, user => user.typeUser, {nullable: true})
+    @OneToMany(type => User, user => user.typeUser, {
+        nullable: true,
+        cascade: true
+    })
     users: User[]
 }
