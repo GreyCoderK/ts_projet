@@ -2,7 +2,6 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "ty
 import { TypeDocument } from "./TypeDocument";
 import { User } from "./User";
 import { Note } from "./Note";
-import { ExtensionAutoriser } from "./ExtensionAutoriser";
 import { Suggestion } from "./Suggestion";
 import { Correction } from "./Correction";
 import { Commentaire } from "./Commentaire";
@@ -47,9 +46,6 @@ export class Document {
         nullable:true
     })
     correction: Correction[]
-
-    @ManyToOne(type => ExtensionAutoriser, extension => extension.documents, {nullable: true})
-    extension : ExtensionAutoriser
 
     @OneToMany(type => Commentaire, commentaire => commentaire.document,{
         nullable:true

@@ -9,7 +9,7 @@ export class Commentaire {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column("varchar")
+    @Column("text")
     libelle: string
 
     @ManyToOne(type => User, user => user.commentaires, {nullable:true})

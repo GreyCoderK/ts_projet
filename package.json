@@ -4,6 +4,7 @@
    "description": "Awesome project developed with TypeORM.",
    "devDependencies": {
       "@types/bcrypt": "^3.0.0",
+      "@types/cookie-parser": "^1.4.1",
       "@types/cors": "^2.8.5",
       "@types/node": "^8.0.29",
       "class-validator": "^0.9.1",

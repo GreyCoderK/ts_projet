@@ -4,6 +4,12 @@ import App from "./App"
 import ClasseController from "./controller/classe.controller"
 import TypeUserController from "./controller/type_user.controller"
 import TypeDocumentController from "./controller/type_document.controller"
+import ActualiteController from "controller/actualite.controller";
+import LogicielController from "controller/logiciel.controller";
+import NoteController from "controller/note.controller";
+import SerieController from "controller/serie.controller";
+import UserController from "controller/user.controller";
+import ExtensionController from "controller/extension_autoriser.controller";
 
 (async () => {
     try {
@@ -16,7 +22,13 @@ import TypeDocumentController from "./controller/type_document.controller"
       [
         new ClasseController(),
         new TypeUserController(),
-        new TypeDocumentController()
+        new TypeDocumentController(),
+        new ActualiteController(),
+        new LogicielController(),
+        new NoteController(),
+        new SerieController(),
+        new UserController(),
+        new ExtensionController()
       ],
       7777
     );

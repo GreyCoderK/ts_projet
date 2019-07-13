@@ -1,8 +1,8 @@
 import * as express from "express"
 import * as bodyParser from "body-parser"
 import * as morgan from "morgan"
-import * as https from "https"
-import * as fs from "fs"
+//import * as https from "https"
+//import * as fs from "fs"
 import Controller from './interfaces/controller.interface';
 import errorMiddleware from './middleware/error.middleware';
 
@@ -10,12 +10,12 @@ import * as cors from "cors"
 
 import * as cluster from 'cluster'
 import * as os from 'os'
-import { createServer } from "tls";
+import * as cookieParser from 'cookie-parser';  
 
 class App {
     public app: express.Application
     public port: number
-    private server
+//    private server
 
     constructor (controllers: Controller[], port: number) {
         this.app = express()
@@ -31,6 +31,7 @@ class App {
         this.app.use(cors())
         this.app.use(bodyParser.json())
         this.app.use(bodyParser.urlencoded({ extended: false }))
+        this.app.use(cookieParser())
     }
 
     private initializedControllers(controllers: Controller[]){

@@ -1,17 +1,20 @@
 import * as express from 'express'
 import Controller from "interfaces/controller.interface";
 import { getRepository } from 'typeorm';
-import { logiciel } from 'entity/Logiciel';
+import { Logiciel } from 'entity/Logiciel';
 import authMiddleware from 'middleware/auth.middleware';
 import validationMiddleware from 'middleware/validation.middleware';
 import { logicielDto } from 'dto/logiciel.dto';
 import NotFoundException from 'exception/notFoundException';
+import { upload } from 'utils/functions.utils';
+import { createWriteStream } from 'fs';
+import { get } from 'http';
 
 class LogicielController implements Controller{
-    public path = '/note';
+    public path = '/logiciel';
     public router = express.Router();
     
-    private logicielRepository = getRepository(logiciel);
+    private logicielRepository = getRepository(Logiciel);
     
     constructor() {
         this.intializeRoutes();
@@ -20,9 +23,10 @@ class LogicielController implements Controller{
     private intializeRoutes() {
         this.router.get(`${this.path}`, this.getAllLogiciel)
         this.router.get(`${this.path}/:id`, this.getLogicielById);
-        this.router.put(`${this.path}/:id`, authMiddleware, validationMiddleware(logicielDto, true),this.modifyLogiciel);
-        this.router.delete(`${this.path}/:id`, authMiddleware,this.deleteNote);
-        this.router.post(this.path, authMiddleware,validationMiddleware(logicielDto),this.createANote);
+        this.router.put(`${this.path}/:id`, authMiddleware, validationMiddleware(logicielDto, true), upload.single('logiciel'),this.modifyLogiciel);
+        this.router.delete(`${this.path}/:id`, authMiddleware,this.deleteLogiciel);
+        this.router.post(this.path, authMiddleware,validationMiddleware(logicielDto), upload.single('logiciel'),this.createALogiciel);
+        this.router.get(`${this.path}/download`, this.dowloadLogiciel);
     }
 
     private getAllLogiciel = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
@@ -44,20 +48,25 @@ class LogicielController implements Controller{
         const id = request.params.id;
         const logiciel = await this.logicielRepository.findOne(id)
         
-        logiciel. = request.body)
-        
-        await this.noteRepository.update(id, note);
-        const updatedNote = await this.noteRepository.findOne(id);
-        if (updatedNote) {
-          response.send(updatedNote);
+        if(request.file.filename) {
+            logiciel.libelle = request.file.filename
+            logiciel.path = '/public/uploads/'+request.file.filename
+        }
+
+        logiciel.description = request.body.description
+
+        await this.logicielRepository.update(id, logiciel);
+        const updatedLogiciel = await this.logicielRepository.findOne(id);
+        if (updatedLogiciel) {
+          response.send(updatedLogiciel);
         } else {
           next(new NotFoundException(id));
         }
     }
 
-    private deleteNote = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+    private deleteLogiciel = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
-        const deleteResponse = await this.noteRepository.delete(id);
+        const deleteResponse = await this.logicielRepository.delete(id);
         if (deleteResponse.raw[1]) {
             response.sendStatus(200);
         } else {
@@ -65,25 +74,47 @@ class LogicielController implements Controller{
         }
     }
 
-    private createANote = async (request, response, next) => {
-        const note = new Note()
-        note.note = request.body.note
-        var user = await getRepository(User).findOne(request.body.user_id)
-        if(!user){
-            next(new NotFoundException(`L'utilisateur aver ${request.body.user_id} `))
-        }else{
-            note.user = user
+    private createALogiciel = async (request, response, next) => {
+        const logiciel = new Logiciel()
+        
+        if(request.file.filename) {
+            logiciel.libelle = request.file.filename
+            logiciel.path = '/public/uploads/'+request.file.filename
+            logiciel.description = request.body.description
         }
 
-        var document = await getRepository(Document).findOne(request.body.document_id)
-        if(!document){
-            next(new NotFoundException(`L'utilisateur aver ${request.body.document_id} `))
-        }else{
-            note.document = document
-        }
-        const newNote = this.noteRepository.create(note);
-        await this.noteRepository.save(newNote);
-        response.send(newNote);
+        const newLogiciel = this.logicielRepository.create(logiciel);
+        await this.logicielRepository.save(newLogiciel);
+        response.send(newLogiciel);
     }
 
+    public dowloadLogiciel = async (request, response, next) => {
+        var logiciel = await this.logicielRepository.findOne(Number(request.body.logiciel_id))
+        const file = createWriteStream(logiciel.path)
+        const req = get(`localhost:7777/logiciel/J---aiyznGQ/${logiciel.libelle}`,function(response) {
+            response.pipe(file)
+            file.on('finish', function() {
+                file.close()
+                next(this.incrementDownload(logiciel.id))
+            })
+        })
+    }
+
+    public incrementDownload = (item) => {
+        async (request, response, next) => {
+            const logiciel = await this.logicielRepository.findOne(item)
+        
+            logiciel.telechargement++
+
+            await this.logicielRepository.update(item, logiciel);
+            const updatedLogiciel = await this.logicielRepository.findOne(item);
+            if (updatedLogiciel) {
+                response.send(updatedLogiciel);
+            } else {
+                next(new NotFoundException(item));
+            }
+        }
+    }
 }
+
+export default LogicielController
