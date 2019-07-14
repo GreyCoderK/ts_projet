@@ -1,6 +1,6 @@
 import {IsString, IsOptional, IsDate, IsBoolean} from "class-validator"
-import { Commentaire } from "entity/Commentaire";
-import { Image } from "entity/Image";
+import { Commentaire } from "../entity/Commentaire";
+import { Image } from "../entity/Image";
 
 export class ActualiteDto {
     

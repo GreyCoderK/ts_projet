@@ -1,13 +1,13 @@
 import * as express from 'express'
-import Controller from "interfaces/controller.interface";
+import Controller from "../interfaces/controller.interface";
 import { getRepository } from 'typeorm';
-import validationMiddleware from 'middleware/validation.middleware';
-import NotFoundException from 'exception/notFoundException';
-import { Note } from 'entity/Note';
-import { NoteDto } from 'dto/note.dto';
-import authMiddleware from 'middleware/auth.middleware';
-import { User } from 'entity/User';
-import { Document } from 'entity/Document';
+import validationMiddleware from '../middleware/validation.middleware';
+import NotFoundException from '../exception/notFoundException';
+import { Note } from '../entity/Note';
+import { NoteDto } from '../dto/note.dto';
+import authMiddleware from '../middleware/auth.middleware';
+import { User } from '../entity/User';
+import { Document } from '../entity/Document';
 
 class NoteController implements Controller{
     public path = '/note';

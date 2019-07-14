@@ -1,12 +1,12 @@
 import * as express from 'express'
-import Controller from "interfaces/controller.interface";
+import Controller from "../interfaces/controller.interface";
 import { getRepository } from 'typeorm';
-import { Logiciel } from 'entity/Logiciel';
-import authMiddleware from 'middleware/auth.middleware';
-import validationMiddleware from 'middleware/validation.middleware';
-import { logicielDto } from 'dto/logiciel.dto';
-import NotFoundException from 'exception/notFoundException';
-import { upload } from 'utils/functions.utils';
+import { Logiciel } from '../entity/Logiciel';
+import authMiddleware from '../middleware/auth.middleware';
+import validationMiddleware from '../middleware/validation.middleware';
+import { logicielDto } from '../dto/logiciel.dto';
+import NotFoundException from '../exception/notFoundException';
+import { upload } from '../utils/functions.utils';
 import { createWriteStream } from 'fs';
 import { get } from 'http';
 

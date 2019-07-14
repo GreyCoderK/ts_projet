@@ -1,8 +1,8 @@
 import * as express from 'express'
-import Controller from "interfaces/controller.interface";
+import Controller from "../interfaces/controller.interface";
 import { getRepository } from "typeorm";
-import { Commentaire } from "entity/Commentaire";
-import NotFoundException from 'exception/notFoundException';
+import { Commentaire } from "../entity/Commentaire";
+import NotFoundException from '../exception/notFoundException';
 
 class CommentaireController implements Controller {
     public path = '/commentaire';

@@ -1,10 +1,10 @@
 import * as express from 'express'
-import Controller from "interfaces/controller.interface";
+import Controller from "../interfaces/controller.interface";
 import { getRepository } from 'typeorm';
-import validationMiddleware from 'middleware/validation.middleware';
-import NotFoundException from 'exception/notFoundException';
-import { Serie } from 'entity/Serie';
-import { SerieDto } from 'dto/serie.dto';
+import validationMiddleware from '../middleware/validation.middleware';
+import NotFoundException from '../exception/notFoundException';
+import { Serie } from '../entity/Serie';
+import { SerieDto } from '../dto/serie.dto';
 
 class SerieController implements Controller{
     public path = '/serie';

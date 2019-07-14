@@ -3,8 +3,8 @@ import { getRepository } from 'typeorm';
 import controller from '../interfaces/controller.interface'
 import validationMiddleware from '../middleware/validation.middleware';
 import NotFoundException from '../exception/notFoundException';
-import { ExtensionDto } from 'dto/extension_autoriser.dto';
-import { ExtensionAutoriser } from 'entity/ExtensionAutoriser';
+import { ExtensionDto } from '../dto/extension_autoriser.dto';
+import { ExtensionAutoriser } from '../entity/ExtensionAutoriser';
 
 class ExtensionController implements controller {
     

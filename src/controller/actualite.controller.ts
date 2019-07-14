@@ -1,16 +1,16 @@
 import * as express from 'express'
-import Controller from "interfaces/controller.interface";
-import { Actualite } from "entity/Actualite";
+import Controller from "../interfaces/controller.interface";
+import { Actualite } from "../entity/Actualite";
 import { getRepository } from 'typeorm';
-import validationMiddleware from 'middleware/validation.middleware';
-import { upload } from 'utils/functions.utils';
-import authMiddleware from 'middleware/auth.middleware';
-import { ActualiteDto } from 'dto/actualite.dto';
-import NotFoundException from 'exception/notFoundException';
-import { Image } from 'entity/Image';
-import { Notification } from 'entity/Notification';
-import { User } from 'entity/User';
-import { Abonnement } from 'entity/Abonnement';
+import validationMiddleware from '../middleware/validation.middleware';
+import { upload } from '../utils/functions.utils';
+import authMiddleware from '../middleware/auth.middleware';
+import { ActualiteDto } from '../dto/actualite.dto';
+import NotFoundException from '../exception/notFoundException';
+import { Image } from '../entity/Image';
+import { Notification } from '../entity/Notification';
+import { User } from '../entity/User';
+import { Abonnement } from '../entity/Abonnement';
 
 class ActualiteController implements Controller{
     public path = '/actualite';
@@ -93,6 +93,7 @@ class ActualiteController implements Controller{
             notification.user = actualite.user
             notification.type = "Actualite"
             notification.message = `L'actualite avec le libelle: ${toErase.libelle} a ete supprime`
+            
             await getRepository(Notification).save(notification)
         })
         const deleteResponse = await this.actualiteRepository.delete(id);

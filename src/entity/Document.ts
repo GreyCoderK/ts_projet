@@ -24,7 +24,7 @@ export class Document {
     @Column("varchar")
     path: string
 
-    @Column("date", {default: Date.now()})
+    @Column("date", {nullable: true})
     createat: Date
 
     @Column("int",{default:0})

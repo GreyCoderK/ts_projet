@@ -1,19 +1,19 @@
 import * as express from 'express'
 import { getRepository } from 'typeorm';
-import Controller from 'interfaces/controller.interface';
-import { Document } from 'entity/Document';
+import Controller from '../interfaces/controller.interface';
+import { Document } from '../entity/Document';
 import { resolve, join } from 'path';
 import { createWriteStream } from 'fs';
-import NotFoundException from 'exception/notFoundException';
-import { User } from 'entity/User';
-import { Abonnement } from 'entity/Abonnement';
-import authMiddleware from 'middleware/auth.middleware';
-import validationMiddleware from 'middleware/validation.middleware';
-import { DocumentDto } from 'dto/document.dto';
+import NotFoundException from '../exception/notFoundException';
+import { User } from '../entity/User';
+import { Abonnement } from '../entity/Abonnement';
+import authMiddleware from '../middleware/auth.middleware';
+import validationMiddleware from '../middleware/validation.middleware';
+import { DocumentDto } from '../dto/document.dto';
 import { get } from 'http';
-import { Notification } from 'entity/Notification';
-import HttpException from 'exception/HttpException';
-import { TypeDocument } from 'entity/TypeDocument';
+import { Notification } from '../entity/Notification';
+import HttpException from '../exception/HttpException';
+import { TypeDocument } from '../entity/TypeDocument';
 
 class DocumentController implements Controller {
     public path = '/document';

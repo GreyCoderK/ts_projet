@@ -1,10 +1,10 @@
 import {IsString, IsOptional, IsDate} from "class-validator"
 import { User } from "../entity/User";
-import { TypeUser } from "entity/TypeUser";
-import { Document } from "entity/Document";
-import { Note } from "entity/Note";
-import { Image } from "entity/Image";
-import { Commentaire } from "entity/Commentaire";
+import { TypeUser } from "../entity/TypeUser";
+import { Document } from "../entity/Document";
+import { Note } from "../entity/Note";
+import { Image } from "../entity/Image";
+import { Commentaire } from "../entity/Commentaire";
 
 export class UserDto {
     

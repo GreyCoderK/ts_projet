@@ -1,11 +1,11 @@
 import { IsString, IsOptional, IsNumber } from "class-validator";
-import { User } from "entity/User";
-import { TypeDocument } from "entity/TypeDocument";
-import { Note } from "entity/Note";
-import { Classe } from "entity/Classe";
-import { Suggestion } from "entity/Suggestion";
-import { Correction } from "entity/Correction";
-import { Commentaire } from "entity/Commentaire";
+import { User } from "../entity/User";
+import { TypeDocument } from "../entity/TypeDocument";
+import { Note } from "../entity/Note";
+import { Classe } from "../entity/Classe";
+import { Suggestion } from "../entity/Suggestion";
+import { Correction } from "../entity/Correction";
+import { Commentaire } from "../entity/Commentaire";
 
 export class DocumentDto {
     

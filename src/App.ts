@@ -1,8 +1,7 @@
 import * as express from "express"
 import * as bodyParser from "body-parser"
 import * as morgan from "morgan"
-//import * as https from "https"
-//import * as fs from "fs"
+import * as fs from "fs"
 import Controller from './interfaces/controller.interface';
 import errorMiddleware from './middleware/error.middleware';
 
@@ -11,11 +10,14 @@ import * as cors from "cors"
 import * as cluster from 'cluster'
 import * as os from 'os'
 import * as cookieParser from 'cookie-parser';  
+import { createServer, Server } from "https";
+import * as socketIo from "socket.io";
 
 class App {
     public app: express.Application
     public port: number
-//    private server
+    public io: SocketIO.Server;
+    public server: Server
 
     constructor (controllers: Controller[], port: number) {
         this.app = express()
@@ -24,6 +26,10 @@ class App {
         this.initializedMiddlewares()
         this.initializedControllers(controllers)
         this.initializeErrorHandling();
+
+        this.setUpServer()
+        this.sockets()
+
     }
 
     private initializedMiddlewares(){
@@ -46,19 +52,22 @@ class App {
         this.app.use(errorMiddleware);
     }
 
-    /*
-    private async createServer() {
-        const [key, cert] = await Promise.all([
-            fs.readFileSync('./key.pem'),
-            fs.readFileSync('./certificate.pem')
-        ])
-        this.server = https.createServer({ key, cert }, this.app)
+    private sockets(): void {
+        this.io = socketIo(this.server)
     }
-    */
+    
+    private setUpServer() {
 
-    private async nbreCluster() {
+        this.server = createServer({ 
+            key: fs.readFileSync('./key.pem'),
+            cert: fs.readFileSync('./cert.pem'),
+            passphrase: 'test' 
+        }, this.app)
+        //this.server = createServer(this.app)
+    }
+
+    public listen(){
         const numberOfCores = os.cpus().length;
-        //await this.createServer()
         if (cluster.isMaster) {
             console.log(`Master ${process.pid} started`);
             for (let i = 0; i < numberOfCores; i++) {
@@ -73,24 +82,19 @@ class App {
             })
         } else {
             console.log(`Worker ${process.pid} started`)
-            this.app.listen(this.port, () => {
+            
+            this.server.listen(this.port, () => {
                 console.log(`L'application a demarre avec succes sur le port ${this.port}`)
             })
-        }
-    }
 
-    public async listen(){
-        /**
-         const [key, cert] = await Promise.all([
-            fs.readFileSync('../key.pem'),
-            fs.readFileSync('../certificate.pem')
-        ]);
-        console.log(`Worker ${process.pid} started`);
-        https.createServer({ key, cert }, this.app).listen(this.port, () => {
-            console.log(`L'application a demarre avec succes sur le port ${this.port} en https`)
-        })  
-         */
-        await this.nbreCluster()
+            this.io.on('connect', (socket: any) => {
+                console.log('Connected client on port %s.', this.port);
+    
+                socket.on('disconnect', () => {
+                    console.log('Client disconnected');
+                });
+            });
+        }
     }
     
 }

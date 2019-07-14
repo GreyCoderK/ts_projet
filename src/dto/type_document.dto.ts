@@ -1,5 +1,5 @@
 import {IsString, IsOptional} from "class-validator"
-import { Document } from "entity/Document";
+import { Document } from "../entity/Document";
 
 export class TypeDocumentDto {
     

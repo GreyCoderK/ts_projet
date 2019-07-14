@@ -41,7 +41,7 @@ export var upload = multer({ //multer settings
     limits:{
         fileSize: 1024 * 1024
     }
-}).single('profilepic');
+});
 
 export var encrypt = (buffer) => {
     var cipher = crypto.createCipher(algorithm,password)

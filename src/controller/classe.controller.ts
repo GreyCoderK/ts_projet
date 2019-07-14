@@ -5,7 +5,7 @@ import validationMiddleware from '../middleware/validation.middleware';
 import {Classe} from '../entity/Classe'
 import {ClasseDto} from "../dto/classe.dto"
 import NotFoundException from '../exception/notFoundException';
-import { Serie } from 'entity/Serie';
+import { Serie } from '../entity/Serie';
 
 class ClasseController implements controller {
 

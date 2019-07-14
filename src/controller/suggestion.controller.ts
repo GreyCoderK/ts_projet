@@ -3,12 +3,12 @@ import { getRepository } from 'typeorm';
 import validationMiddleware from '../middleware/validation.middleware';
 import NotFoundException from '../exception/notFoundException';
 import Controller from '../interfaces/controller.interface';
-import { Suggestion } from 'entity/Suggestion';
-import { upload } from 'utils/functions.utils';
-import { Document } from 'entity/Document';
-import { SuggestionDto } from 'dto/suggestion.dto';
-import { User } from 'entity/User';
-import { Notification } from 'entity/Notification';
+import { Suggestion } from '../entity/Suggestion';
+import { upload } from '../utils/functions.utils';
+import { Document } from '../entity/Document';
+import { SuggestionDto } from '../dto/suggestion.dto';
+import { User } from '../entity/User';
+import { Notification } from '../entity/Notification';
 
 class SuggestionController implements Controller {
     public router = express.Router()

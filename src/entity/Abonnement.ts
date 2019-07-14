@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, ManyToOne, OneToOne, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "./User";
 import { Document } from "./Document";
 import { Notification } from "./Notification";
@@ -6,7 +6,9 @@ import { Actualite } from "./Actualite";
 
 @Entity()
 export class Abonnement {
-    
+    @PrimaryGeneratedColumn()
+    id: number
+
     @ManyToOne(type => User, user => user.abonnements, {nullable:true})
     user:User
 

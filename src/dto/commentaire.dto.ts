@@ -1,8 +1,8 @@
 import { IsString, IsOptional } from "class-validator";
-import { Actualite } from "entity/Actualite";
-import { Document } from "entity/Document";
-import { User } from "entity/User";
-import { Commentaire } from "entity/Commentaire";
+import { Actualite } from "../entity/Actualite";
+import { Document } from "../entity/Document";
+import { User } from "../entity/User";
+import { Commentaire } from "../entity/Commentaire";
 
 export class CommentaireDto {
 

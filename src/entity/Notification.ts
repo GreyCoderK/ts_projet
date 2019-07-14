@@ -1,10 +1,13 @@
-import { Entity, Column, OneToOne, ManyToOne } from "typeorm";
+import { Entity, Column, OneToOne, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Abonnement } from "./Abonnement";
 import { User } from "./User";
 
 @Entity()
 export class Notification {
-    @Column("string")
+    @PrimaryGeneratedColumn()
+    id: number
+
+    @Column("varchar")
     type: string
 
     @Column("text",{

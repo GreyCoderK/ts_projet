@@ -4,7 +4,7 @@ import { Classe } from "../entity/Classe";
 export class SerieDto {
     
     @IsString()
-    libelle!: string
+    libelle: string
     
     @IsOptional()
     classe: Array<Classe>

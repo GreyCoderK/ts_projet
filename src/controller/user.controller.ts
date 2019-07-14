@@ -4,17 +4,17 @@ import validationMiddleware from '../middleware/validation.middleware';
 import {UserDto} from "../dto/user.dto"
 import NotFoundException from '../exception/notFoundException';
 import Controller from '../interfaces/controller.interface';
-import { User } from 'entity/User';
-import { upload } from 'utils/functions.utils';
-import { Image } from 'entity/Image';
-import { TypeUser } from 'entity/TypeUser';
-import UserWithThatEmailAlreadyExistsException from 'exception/UserWithThatEmailAlreadyExistsException';
+import { User } from '../entity/User';
+import { upload } from '../utils/functions.utils';
+import { Image } from '../entity/Image';
+import { TypeUser } from '../entity/TypeUser';
+import UserWithThatEmailAlreadyExistsException from '../exception/UserWithThatEmailAlreadyExistsException';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-import TokenData from 'interfaces/dataToken.interface';
-import DataStoredInToken from 'interfaces/dataStoredInToken';
-import WrongCredentialsException from 'exception/WrongCredentialsException';
-import { LogInDto } from 'dto/log_in.dto';
+import TokenData from '../interfaces/dataToken.interface';
+import DataStoredInToken from '../interfaces/dataStoredInToken';
+import WrongCredentialsException from '../exception/WrongCredentialsException';
+import { LogInDto } from '../dto/log_in.dto';
 
 class UserController implements Controller {
     public path = '/user';

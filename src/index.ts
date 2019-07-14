@@ -4,14 +4,14 @@ import App from "./App"
 import ClasseController from "./controller/classe.controller"
 import TypeUserController from "./controller/type_user.controller"
 import TypeDocumentController from "./controller/type_document.controller"
-import ActualiteController from "controller/actualite.controller";
-import LogicielController from "controller/logiciel.controller";
-import NoteController from "controller/note.controller";
-import SerieController from "controller/serie.controller";
-import UserController from "controller/user.controller";
-import ExtensionController from "controller/extension_autoriser.controller";
-import DocumentController from "controller/document.controller";
-import SuggestionController from "controller/suggestion.controller";
+import ActualiteController from "./controller/actualite.controller";
+import LogicielController from "./controller/logiciel.controller";
+import NoteController from "./controller/note.controller";
+import SerieController from "./controller/serie.controller";
+import UserController from "./controller/user.controller";
+import ExtensionController from "./controller/extension_autoriser.controller";
+import DocumentController from "./controller/document.controller";
+import SuggestionController from "./controller/suggestion.controller";
 
 (async () => {
     try {
@@ -20,6 +20,7 @@ import SuggestionController from "controller/suggestion.controller";
       console.log('Error while connecting to the database', error);
       return error;
     }
+    var port = Number(process.env.PORT) || 7777
     const app = new App(
       [
         new ClasseController(),
@@ -34,7 +35,7 @@ import SuggestionController from "controller/suggestion.controller";
         new DocumentController(),
         new SuggestionController()
       ],
-      7777
+      port
     );
-    await app.listen();
+    app.listen();
 })();
