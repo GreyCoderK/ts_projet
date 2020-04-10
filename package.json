@@ -31,6 +31,6 @@
    },
    "scripts": {
       "start": "ts-node-dev src/index.ts",
-      "lint": "tslint -p tsconfig.json -c tslint.json"
+      "lint": "tslint -p tsconfig.json && tslint -c tslint.json"
    }
 }
