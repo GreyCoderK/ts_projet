@@ -30,6 +30,7 @@
       "typeorm": "0.2.16"
    },
    "scripts": {
-      "start": "ts-node-dev src/index.ts"
+      "start": "ts-node-dev src/index.ts",
+      "lint": "tslint -p tsconfig.json -c tslint.json"
    }
 }
