@@ -27,10 +27,11 @@
       "socket.io": "^2.2.0",
       "ts-node-dev": "^1.0.0-pre.32",
       "tslint": "^5.15.0",
-      "typeorm": "0.2.16"
+      "typeorm": "0.2.16",
+      "tslint-config-airbnb": "^5.11.2"
    },
    "scripts": {
       "start": "ts-node-dev src/index.ts",
-      "lint": "tslint -p tsconfig.json && tslint -c tslint.json"
+      "lint": "tslint -p tsconfig.json -c tslint.json"
    }
 }
